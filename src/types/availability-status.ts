@@ -1,0 +1,1 @@
+export type AvailabilityStatus = 'In Stock' | 'Low Stock' | 'Out of Stock'
