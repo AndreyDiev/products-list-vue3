@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import productGrid from './components/product-grid.vue';
-import filterForm from './components/filter-form.vue';
 
 </script>
 
 <template>
   <main class="main-content">
-    <filterForm></filterForm>
-    <productGrid></productGrid>
+    <router-view></router-view> 
   </main>
 </template>
 

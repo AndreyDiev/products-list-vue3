@@ -8,4 +8,5 @@ export type Product = {
     rating: number;
     thumbnail: string
     availabilityStatus: AvailabilityStatus;
+    images: string[];
 }

@@ -1,91 +1,93 @@
 <template>
-  <article class="product-card" :class="cardClass">
-    <div class="product-card__image-wrapper">
-      <img
-        :src="product.thumbnail"
-        :alt="product.title"
-        class="product-card__image"
-        loading="lazy"
-        @error="handleImageError"
-      />
-      
-      <div class="product-card__status" :class="statusClass">
-        {{ product.availabilityStatus }}
-      </div>
-      
-    </div>
+  <router-link :to="`/product/${product.id}`" class="product-card-link">
+    <article class="product-card" :class="cardClass">
+      <div class="product-card__image-wrapper">
+        <img
+          :src="product.thumbnail"
+          :alt="product.title"
+          class="product-card__image"
+          loading="lazy"
+          @error="handleImageError"
+        />
 
-    <div class="product-card__content">
-      <div class="product-card__header">
-        <h3 class="product-card__title">
-          {{ product.title }}
-        </h3>
-        <p class="product-card__description">
-          {{ truncatedDescription }}
-        </p>
-      </div>
-
-      <div class="product-card__rating">
-        <div class="rating-stars">
-          <span
-            v-for="star in 5"
-            :key="star"
-            class="rating-star"
-            :class="getStarClass(star)"
-          >
-            ★
-          </span>
+        <div class="product-card__status" :class="statusClass">
+          {{ product.availabilityStatus }}
         </div>
-        <span class="rating-value">{{ product.rating.toFixed(1) }}</span>
       </div>
 
-      <div class="product-card__footer">
-        <div class="product-card__price-wrapper">
-          <span class="product-card__price">
-            {{ formattedPrice }}
-          </span>
+      <div class="product-card__content">
+        <div class="product-card__header">
+          <h3 class="product-card__title">
+            {{ product.title }}
+          </h3>
+          <p class="product-card__description">
+            {{ truncatedDescription }}
+          </p>
         </div>
-        
-        <button 
-          class="product-card__action-btn"
-          :disabled="isOutOfStock"
-          :class="{ 'product-card__action-btn--disabled': isOutOfStock }"
-          @click="handleAddToCart"
-        >
-          <span v-if="isOutOfStock">Нет в наличии</span>
-          <span v-else>В корзину</span>
-          <svg 
-            v-if="!isOutOfStock"
-            class="action-btn__icon" 
-            width="16" 
-            height="16" 
-            viewBox="0 0 24 24"
-            fill="none"
+
+        <div class="product-card__rating">
+          <div class="rating-stars">
+            <span v-for="star in 5" :key="star" class="rating-star" :class="getStarClass(star)">
+              ★
+            </span>
+          </div>
+          <span class="rating-value">{{ product.rating.toFixed(1) }}</span>
+        </div>
+
+        <div class="product-card__footer">
+          <div class="product-card__price-wrapper">
+            <span class="product-card__price">
+              {{ formattedPrice }}
+            </span>
+          </div>
+
+          <button
+            class="product-card__action-btn"
+            :disabled="isOutOfStock"
+            :class="{ 'product-card__action-btn--disabled': isOutOfStock }"
+            @click="handleAddToCart"
           >
-            <path d="M6 19.5C6 20.328 6.672 21 7.5 21C8.328 21 9 20.328 9 19.5C9 18.672 8.328 18 7.5 18C6.672 18 6 18.672 6 19.5Z" fill="currentColor"/>
-            <path d="M16.5 21C17.328 21 18 20.328 18 19.5C18 18.672 17.328 18 16.5 18C15.672 18 15 18.672 15 19.5C15 20.328 15.672 21 16.5 21Z" fill="currentColor"/>
-            <path d="M20.5 6H5.5L4.5 3H1V5H3L6.5 15H18L21.5 6H20.5Z" fill="currentColor"/>
-          </svg>
-        </button>
+            <span v-if="isOutOfStock">Нет в наличии</span>
+            <span v-else>В корзину</span>
+            <svg
+              v-if="!isOutOfStock"
+              class="action-btn__icon"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M6 19.5C6 20.328 6.672 21 7.5 21C8.328 21 9 20.328 9 19.5C9 18.672 8.328 18 7.5 18C6.672 18 6 18.672 6 19.5Z"
+                fill="currentColor"
+              />
+              <path
+                d="M16.5 21C17.328 21 18 20.328 18 19.5C18 18.672 17.328 18 16.5 18C15.672 18 15 18.672 15 19.5C15 20.328 15.672 21 16.5 21Z"
+                fill="currentColor"
+              />
+              <path d="M20.5 6H5.5L4.5 3H1V5H3L6.5 15H18L21.5 6H20.5Z" fill="currentColor" />
+            </svg>
+          </button>
+        </div>
       </div>
-    </div>
-  </article>
+    </article>
+  </router-link>
 </template>
 
 <script setup lang="ts">
-import type { Product } from '@/types';
+import type { Product } from '@/types'
 import { computed, type PropType } from 'vue'
-
+import { RouterLink } from 'vue-router'
 
 const props = defineProps({
   product: {
     type: Object as PropType<Product>,
-    required: true
+    required: true,
   },
   compact: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const emit = defineEmits<{
@@ -99,26 +101,24 @@ const formattedPrice = computed(() => {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 0,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 2,
   }).format(props.product.price)
 })
 
-const isOutOfStock = computed(() => 
-  props.product.availabilityStatus === 'Out of Stock'
-)
+const isOutOfStock = computed(() => props.product.availabilityStatus === 'Out of Stock')
 
 const statusClass = computed(() => {
   const status = props.product.availabilityStatus
   return {
     'product-card__status--in-stock': status === 'In Stock',
     'product-card__status--low-stock': status === 'Low Stock',
-    'product-card__status--out-of-stock': status === 'Out of Stock'
+    'product-card__status--out-of-stock': status === 'Out of Stock',
   }
 })
 
 const cardClass = computed(() => ({
   'product-card--compact': props.compact,
-  'product-card--out-of-stock': isOutOfStock.value
+  'product-card--out-of-stock': isOutOfStock.value,
 }))
 
 const truncatedDescription = computed(() => {
@@ -145,7 +145,8 @@ const handleAddToCart = (event: MouseEvent) => {
 
 const handleImageError = (event: Event) => {
   const img = event.target as HTMLImageElement
-  img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNTAgODBDMTIxLjEgODAgOTggMTAzLjEgOTggMTMyQzk4IDE2MC45IDEyMS4xIDE4NCAxNTAgMTg0QzE3OC45IDE4NCAyMDIgMTYwLjkgMjAyIDEzMkMyMDIgMTAzLjEgMTc4LjkgODAgMTUwIDgwWiIgZmlsbD0iI0RDRENEQyIvPgo8cGF0aCBkPSJNMTcwLjUgMTE3TDE1MCAxMzcuNUwxMjkuNSAxMTdMMTE3IDEyOS41TDEzNy41IDE1MEwxMTcgMTcwLjVMMTI5LjUgMTgzTDE1MCAxNjIuNUwxNzAuNSAxODNMMTgzIDE3MC41TDE2Mi41IDE1MEwxODMgMTI5LjVMMTcwLjUgMTE3WiIgZmlsbD0iI0I4QjhCOCIvPgo8L3N2Zz4K'
+  img.src =
+    'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik0xNTAgODBDMTIxLjEgODAgOTggMTAzLjEgOTggMTMyQzk4IDE2MC45IDEyMS4xIDE4NCAxNTAgMTg0QzE3OC45IDE4NCAyMDIgMTYwLjkgMjAyIDEzMkMyMDIgMTAzLjEgMTc4LjkgODAgMTUwIDgwWiIgZmlsbD0iI0RDRENEQyIvPgo8cGF0aCBkPSJNMTcwLjUgMTE3TDE1MCAxMzcuNUwxMjkuNSAxMTdMMTE3IDEyOS41TDEzNy41IDE1MEwxMTcgMTcwLjVMMTI5LjUgMTgzTDE1MCAxNjIuNUwxNzAuNSAxODNMMTgzIDE3MC41TDE2Mi41IDE1MEwxODMgMTI5LjVMMTcwLjUgMTE3WiIgZmlsbD0iI0I4QjhCOCIvPgo8L3N2Zz4K'
 }
 </script>
 
@@ -167,10 +168,16 @@ const handleImageError = (event: Event) => {
 
 .product-card:hover {
   transform: translateY(-4px);
-  box-shadow: 
+  box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.12),
     0 2px 6px rgba(0, 0, 0, 0.05);
   border-color: #e0e0e0;
+}
+
+.product-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 .product-card--out-of-stock {
@@ -419,29 +426,29 @@ const handleImageError = (event: Event) => {
   .product-card {
     border-radius: 12px;
   }
-  
+
   .product-card__content {
     padding: 16px;
     gap: 12px;
   }
-  
+
   .product-card__title {
     font-size: 16px;
   }
-  
+
   .product-card__description {
     font-size: 13px;
   }
-  
+
   .product-card__price {
     font-size: 20px;
   }
-  
+
   .product-card__action-btn {
     padding: 8px 16px;
     font-size: 13px;
   }
-  
+
   .rating-star {
     font-size: 14px;
   }
@@ -451,42 +458,42 @@ const handleImageError = (event: Event) => {
   .product-card {
     border-radius: 10px;
   }
-  
+
   .product-card__content {
     padding: 14px;
     gap: 10px;
   }
-  
+
   .product-card__title {
     font-size: 15px;
     -webkit-line-clamp: 2;
   }
-  
+
   .product-card__description {
     font-size: 12px;
     -webkit-line-clamp: 2;
   }
-  
+
   .product-card__footer {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
   }
-  
+
   .product-card__price-wrapper {
     align-items: center;
   }
-  
+
   .product-card__action-btn {
     width: 100%;
     justify-content: center;
   }
-  
+
   .product-card__status {
     font-size: 11px;
     padding: 5px 10px;
   }
-  
+
   .product-card__discount {
     font-size: 12px;
     padding: 5px 8px;
@@ -534,38 +541,38 @@ const handleImageError = (event: Event) => {
     border-color: #34495e;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
-  
+
   .product-card:hover {
-    box-shadow: 
+    box-shadow:
       0 8px 24px rgba(0, 0, 0, 0.3),
       0 2px 6px rgba(0, 0, 0, 0.15);
     border-color: #4a6572;
   }
-  
+
   .product-card__title {
     color: #ecf0f1;
   }
-  
+
   .product-card__description {
     color: #bdc3c7;
   }
-  
+
   .product-card__price {
     color: #ecf0f1;
   }
-  
+
   .product-card__footer {
     border-top-color: #34495e;
   }
-  
+
   .product-card__image-wrapper {
     background: #34495e;
   }
-  
+
   .product-card__image {
     background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
   }
-  
+
   .rating-value {
     color: #bdc3c7;
   }
@@ -593,11 +600,11 @@ const handleImageError = (event: Event) => {
   .product-card {
     border: 2px solid #000;
   }
-  
+
   .product-card__status {
     border: 2px solid currentColor;
   }
-  
+
   .product-card__discount {
     border: 2px solid #ff0000;
   }
@@ -608,7 +615,7 @@ const handleImageError = (event: Event) => {
   .product-card {
     max-width: 100%;
   }
-  
+
   .product-card__image-wrapper {
     aspect-ratio: 3/2;
   }
@@ -619,7 +626,7 @@ const handleImageError = (event: Event) => {
   .product-card__title {
     font-size: 17px;
   }
-  
+
   .product-card__action-btn {
     padding: 10px 18px;
   }
@@ -651,7 +658,7 @@ const handleImageError = (event: Event) => {
     border: 1px solid #ddd;
     break-inside: avoid;
   }
-  
+
   .product-card__action-btn {
     display: none;
   }
