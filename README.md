@@ -1,48 +1,30 @@
-# .
+# Тестовое задание: Каталог товаров на Vue 3
 
-This template should help get you started developing with Vue 3 in Vite.
+Прототип интернет-магазина с реактивной фильтрацией и детальной страницей товара, использующий API [dummyjson.com](https://dummyjson.com).
 
-## Recommended IDE Setup
+## Функционал
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **Список товаров** - карточки с фото, названием, ценой, рейтингом, статусом
+- **Фильтрация** - по наличию и минимальной цене (реактивная, без кнопки)
+- **Детальная карточка** - роутинг на /product/:id с полной информацией
+- **Адаптивный дизайн** - работает на всех устройствах
 
-## Recommended Browser Setup
+## Технологии
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+- Vue 3 + Composition API + `<script setup>`
+- TypeScript
+- Vue Router
+- SCSS
+- Vite
 
-## Type Support for `.vue` Imports in TS
+## Инструкции по запуску
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+Для запуска проекта локально выполните следующие шаги:
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+1. **Клонируйте репозиторий:**
+   - git clone https://github.com/AndreyDiev/products-list-vue3.git 
+   - cd products-list-vue3
+2. **Установите зависимости:**
+   npm i
+3. **Запустите приложение:**
+   npm run dev
