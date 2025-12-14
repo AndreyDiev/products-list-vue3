@@ -15,6 +15,15 @@ const activeImageIndex = ref(0)
 const setActiveImage = (index: number) => {
   activeImageIndex.value = index
 }
+
+const getStarClass = (starNumber: number) => {
+  if (product.value) {
+    const rating = product.value.rating
+    if (starNumber <= Math.floor(rating)) return 'rating-star--full'
+    if (starNumber === Math.ceil(rating) && rating % 1 > 0.3) return 'rating-star--half'
+    return ''
+  }
+}
 </script>
 
 <template>
@@ -58,7 +67,18 @@ const setActiveImage = (index: number) => {
         </span>
 
         <h1 class="product-title">{{ product.title }}</h1>
+
+        <div class="product-card__rating">
+          <div class="rating-stars">
+            <span v-for="star in 5" :key="star" class="rating-star" :class="getStarClass(star)">
+              ★
+            </span>
+          </div>
+          <span class="rating-value">{{ product.rating.toFixed(1) }}</span>
+        </div>
+        
         <p class="product-price">{{ product.price.toLocaleString() }} ₽</p>
+
 
         <div class="product-description">
           <h3>Описание</h3>

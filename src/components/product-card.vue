@@ -150,7 +150,7 @@ const handleImageError = (event: Event) => {
 }
 </script>
 
-<style scoped>
+<style>
 /* Базовые стили карточки */
 .product-card {
   background: white;
