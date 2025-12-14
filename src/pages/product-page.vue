@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProducts } from '@/composables/use-products'
 
 const route = useRoute()
 const { products } = useProducts()
 
-const product = computed(() => {
-  return products.value.find((p) => p.id === Number(route.params.id))
-})
+const product = products.value.find((p) => p.id === Number(route.params.id))
 
 const activeImageIndex = ref(0)
 
@@ -17,8 +15,8 @@ const setActiveImage = (index: number) => {
 }
 
 const getStarClass = (starNumber: number) => {
-  if (product.value) {
-    const rating = product.value.rating
+  if (product) {
+    const rating = product.rating
     if (starNumber <= Math.floor(rating)) return 'rating-star--full'
     if (starNumber === Math.ceil(rating) && rating % 1 > 0.3) return 'rating-star--half'
     return ''
