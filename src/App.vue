@@ -1,39 +1,24 @@
 <script setup lang="ts">
-import { useProducts } from '@/composables/use-products'
-import productCard from './components/product-card.vue'
+import productGrid from './components/product-grid.vue';
+import filterForm from './components/filter-form.vue';
 
-const {
-  products,
-  //isLoading, error, totalProducts, refetch
-} = useProducts()
 </script>
 
 <template>
-  <div class="products-grid">
-    <productCard v-for="product in products" :key="product.id" :product="product"></productCard
-    ><br />
-  </div>
+  <main class="main-content">
+    <filterForm></filterForm>
+    <productGrid></productGrid>
+  </main>
 </template>
 
-<style scoped lang="scss">
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-  padding: 20px;
+<style>
+body {
+  padding: 0;
+  margin: 0;
+  background: #f0f8ff;
 }
 
-@media (max-width: 768px) {
-  .products-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 16px;
-    padding: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .products-grid {
-    grid-template-columns: 1fr;
-  }
+.main-content {
+  padding: 12px 16px;
 }
 </style>

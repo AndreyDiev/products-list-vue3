@@ -2,12 +2,15 @@ import { ref, computed, onMounted } from 'vue'
 import { productsApi } from '@/api/products'
 import type { Product } from '@/types/product'
 
-export const useProducts = () => {
-  const products = ref<Product[]>([])
-  const isLoading = ref(true)
-  const error = ref<string | null>(null)
+const products = ref<Product[]>([])
+const isLoading = ref(true)
+const error = ref<string | null>(null)
+// Реактивные фильтры
+const minPrice = ref<number>(0) // Минимальная цена
+const onlyInStock = ref<boolean>(false) // Флаг "Только в наличии"
 
-  const fetchProducts = async (limit: number = 10, skip: number = 0) => {
+export const useProducts = () => {
+  const fetchProducts = async (limit: number = 30, skip: number = 0) => {
     try {
       isLoading.value = true
       error.value = null
@@ -19,7 +22,20 @@ export const useProducts = () => {
     }
   }
 
-  const totalProducts = computed(() => products.value.length)
+  const filteredProducts = computed(() => {
+    return products.value.filter((product) => {
+      // Фильтр по цене
+      const matchesPrice = product.price >= (minPrice.value || 0)
+
+      // Фильтр по статусу наличия
+      // Если галочка включена, убираем 'Out of Stock'
+      // Если выключена — показываем всё
+      const isAvailable = product.availabilityStatus !== 'Out of Stock'
+      const matchesStock = onlyInStock.value ? isAvailable : true
+
+      return matchesPrice && matchesStock
+    })
+  })
 
   onMounted(() => {
     fetchProducts()
@@ -29,7 +45,10 @@ export const useProducts = () => {
     products,
     isLoading,
     error,
-    totalProducts,
+    filteredProducts,
+    minPrice,
+    onlyInStock,
+    fetchProducts,
     refetch: fetchProducts,
   }
 }
